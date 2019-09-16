@@ -35,4 +35,24 @@ class Task
 		$statement->execute();
 		return $this->getTask($this->database->lastInsertId());
 	}
+	public function updateTask($data)
+	{
+		$statement = $this->database->prepare(
+			'UPDATE tasks SET task=:task, status=:status WHERE id=:id'
+		);
+		$statement->bindParam('task', $data['task']);
+		$statement->bindParam('status', $data['status']);
+		$statement->bindParam('id', $data['task_id']);
+		$statement->execute();
+		return $this->getTask($data['task_id']);
+	}
+	public function deleteTask($course_id)
+	{
+		$statement = $this->database->prepare(
+			'DELETE FROM tasks WHERE id=:id'
+		);
+		$statement->bindParam('id', $course_id);
+		$statement->execute();
+		return ['message' => 'The task was deleted'];
+	}
 }
